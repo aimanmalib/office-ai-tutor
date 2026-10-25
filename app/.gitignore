@@ -1,0 +1,8 @@
+config/.env
+config/groq-keys.json
+data/ratelimit/*.json
+data/groq-usage.json
+data/chat-status.json
+.DS_Store
+Thumbs.db
+*.log

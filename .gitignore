@@ -1,0 +1,6 @@
+app/config/.env
+app/config/groq-keys.json
+app/data/
+tailwind/node_modules/
+.DS_Store
+tailwind/package-lock.json

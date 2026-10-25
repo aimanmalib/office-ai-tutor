@@ -1,0 +1,256 @@
+html { scroll-behavior: smooth; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C4B5FD; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #A78BFA; }
+
+/* Markdown */
+.markdown { line-height: 1.65; }
+.markdown > *:first-child { margin-top: 0; }
+.markdown > *:last-child { margin-bottom: 0; }
+.markdown p { margin: 0.5em 0; }
+.markdown pre {
+    background: #1F2937;
+    color: #F9FAFB;
+    padding: 12px 16px;
+    border-radius: 12px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    margin: 0.75em 0;
+    line-height: 1.5;
+}
+.markdown code {
+    background: rgba(124, 58, 237, 0.1);
+    color: #6D28D9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    font-weight: 500;
+}
+.markdown pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    font-weight: 400;
+}
+.markdown ul, .markdown ol { padding-left: 1.5em; margin: 0.5em 0; }
+.markdown ul { list-style: disc; }
+.markdown ol { list-style: decimal; }
+.markdown li { margin: 0.25em 0; }
+.markdown strong { font-weight: 700; color: #1F2937; }
+.markdown em { font-style: italic; }
+.markdown a { color: #7C3AED; text-decoration: underline; }
+.markdown h1, .markdown h2, .markdown h3 { font-weight: 700; margin: 0.75em 0 0.35em; color: #1F2937; }
+.markdown h1 { font-size: 1.25em; }
+.markdown h2 { font-size: 1.15em; }
+.markdown h3 { font-size: 1.05em; }
+.markdown blockquote {
+    border-left: 4px solid #A78BFA;
+    padding-left: 12px;
+    color: #6B7280;
+    margin: 0.5em 0;
+}
+.markdown table {
+    border-collapse: collapse;
+    margin: 0.75em 0;
+    font-size: 0.9em;
+}
+.markdown th, .markdown td {
+    border: 1px solid #E5E7EB;
+    padding: 6px 12px;
+}
+.markdown th { background: #F3F4F6; font-weight: 600; }
+
+/* When markdown is in user bubble (white text) */
+.user-bubble.markdown code,
+.user-bubble.markdown strong { color: #FEF3C7; background: rgba(255,255,255,0.2); }
+
+/* Typing dots */
+.typing-dots { display: inline-flex; gap: 5px; padding: 10px 16px; align-items: center; }
+.typing-dots span {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #A78BFA;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+/* Message slide-in */
+.message-enter {
+    animation: slideInMsg 0.35s ease-out;
+}
+@keyframes slideInMsg {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Keyboard key style */
+.kbd {
+    display: inline-block;
+    padding: 4px 10px;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-bottom-width: 3px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8em;
+    font-weight: 600;
+    color: #374151;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Formula card */
+.formula-card { transition: transform 0.2s, box-shadow 0.2s; }
+.formula-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(124, 58, 237, 0.12); }
+
+/* Hide formula card when filtered */
+.formula-card.hidden-by-filter { display: none; }
+
+/* Reference page — browser-native virtualization for 500+ cards.
+   Cards off-screen aren't rendered → smooth scroll + fast initial paint. */
+.ref-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 380px;
+}
+
+/* Scroll target offset for sticky nav */
+.scroll-mt-24 { scroll-margin-top: 6rem; }
+
+/* Soft gradient text */
+.gradient-text {
+    background: linear-gradient(90deg, #7C3AED, #EC4899, #F59E0B);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Suggestion chips */
+.suggestion {
+    transition: all 0.2s;
+}
+.suggestion:hover {
+    border-color: #7C3AED;
+    background: #F5F3FF;
+    transform: translateY(-1px);
+}
+
+/* Excel-style grid for latihan */
+.excel-grid-wrap {
+    overflow-x: auto;
+    margin: 0.5em 0 1em;
+    border-radius: 12px;
+}
+.excel-grid {
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85em;
+    background: white;
+    min-width: 100%;
+}
+.excel-grid th, .excel-grid td {
+    border: 1px solid #d1d5db;
+    padding: 8px 12px;
+    min-width: 90px;
+    height: 36px;
+    white-space: nowrap;
+}
+.excel-grid .cell-corner,
+.excel-grid .cell-colhead,
+.excel-grid .cell-rowhead {
+    background: #f3f4f6;
+    color: #4b5563;
+    font-weight: 700;
+    font-size: 0.78em;
+    text-align: center;
+    min-width: 42px;
+    width: 42px;
+}
+.excel-grid .cell-colhead { color: #4b5563; }
+.excel-grid .cell-data {
+    background: white;
+    color: #1f2937;
+}
+.excel-grid .cell-target {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FED7AA 100%);
+    border: 2px solid #F59E0B !important;
+    color: #92400E;
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px white;
+}
+
+@media (max-width: 640px) {
+    .excel-grid th, .excel-grid td { padding: 6px 8px; min-width: 70px; font-size: 0.75em; }
+    .excel-grid .cell-corner,
+    .excel-grid .cell-colhead,
+    .excel-grid .cell-rowhead { min-width: 32px; width: 32px; }
+}
+
+/* Modal */
+.modal-fade-in { animation: modalFadeIn 0.18s ease-out; }
+.modal-fade-out { animation: modalFadeOut 0.15s ease-out forwards; }
+.modal-pop-in { animation: modalPopIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.modal-pop-out { animation: modalPopOut 0.15s ease-in forwards; }
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes modalPopIn {
+    0%   { opacity: 0; transform: scale(0.92) translateY(8px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes modalPopOut {
+    0%   { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.96); }
+}
+
+/* Code in formula syntax */
+.syntax-block {
+    font-family: 'JetBrains Mono', monospace;
+    background: #1F2937;
+    color: #FBBF24;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.85em;
+    overflow-x: auto;
+    max-width: 100%;
+}
+.syntax-block .arg { color: #67E8F9; }
+.syntax-block .opt { color: #94A3B8; font-style: italic; }
+
+/* Mobile overflow safety — break long unspaced code (formulas, URLs) so they don't
+   push the card wider than the viewport. Only applies to code in card contexts. */
+.formula-card code.block,
+.formula-card code { overflow-wrap: anywhere; word-break: break-word; }
+.formula-card { min-width: 0; }
+.formula-card .syntax-block { white-space: pre-wrap; word-break: break-word; }
+
+/* Inline <code> inside narrow cards should also wrap rather than overflow */
+.cheatsheet-prose code,
+article code:not(.syntax-block) { overflow-wrap: anywhere; }
+
+/* Defensive: prevent any descendant of <article> on small screens from blowing out width.
+   Required for iOS Safari which is stricter about anonymous flex items + emoji + text mixing.
+   Targets only narrow viewports — keeps richer behavior on desktop. */
+@media (max-width: 640px) {
+    article { min-width: 0; }
+    article section { overflow-x: hidden; min-width: 0; }
+    article section > *,
+    article section .grid,
+    article section .flex { min-width: 0; }
+    article pre { max-width: 100%; }
+    article .syntax-block { white-space: pre-wrap; overflow-wrap: anywhere; }
+}
+
+/* iPhone Safari zum masuk bila medan input < 16px difokus (dan tidak zum keluar semula). Telefon sahaja. */
+@media (max-width: 767px) {
+    input, textarea, select { font-size: 16px !important; }   /* semua medan: carian, admin, playground */
+}

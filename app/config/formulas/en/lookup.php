@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+// Teks EN rujukan fungsi (lookup); kunci = name dalam config/formulas/lookup.php, susunan sama.
+return [
+    'ADDRESS' => ['desc' => 'Builds a cell address as text from a row number and a column number.'],
+    'AREAS' => ['desc' => 'Returns the number of areas in a reference, where an area is a contiguous range or a single cell.'],
+    'CHOOSE' => ['desc' => 'Returns a value from a list of arguments based on an index number.', 'usecase' => 'Turn a month number into a quarter, or a weekday number into a day name.'],
+    'CHOOSECOLS' => ['desc' => 'Returns the specified columns from an array or range.'],
+    'CHOOSEROWS' => ['desc' => 'Returns the specified rows from an array or range.'],
+    'COLUMN' => ['desc' => 'Returns the column number of a cell reference.'],
+    'COLUMNS' => ['desc' => 'Returns the number of columns in a range or array.'],
+    'DROP' => ['desc' => 'Returns an array after removing a set number of rows or columns from its start or end.'],
+    'EXPAND' => ['desc' => 'Expands an array to the given number of rows and columns and fills the new cells with a padding value (<code>#N/A</code> by default).'],
+    'FILTER' => ['desc' => 'Filters a range by a condition and returns the matching rows as a dynamic array.', 'usecase' => 'Show a list of sales over 1,000 that updates itself when the data changes.', 'sample' => 'Rows where column B is greater than 1000'],
+    'FORMULATEXT' => ['desc' => 'Returns the formula in the referenced cell as text.', 'usecase' => 'Display a formula next to its result for workbook documentation or teaching material.'],
+    'GETPIVOTDATA' => ['desc' => 'Returns data shown in a PivotTable based on the fields and items you name.'],
+    'HLOOKUP' => ['desc' => 'Searches the first row of a table and returns a value from the row you specify in the same column; in Microsoft 365, <code>XLOOKUP</code> is more flexible.'],
+    'HSTACK' => ['desc' => 'Stacks arrays side by side horizontally into a single array.'],
+    'HYPERLINK' => ['desc' => 'Creates a clickable link to a web page, a file, or a location in the workbook.'],
+    'IMAGE' => ['desc' => 'Inserts an image from a URL into a cell.'],
+    'INDEX' => ['desc' => 'Returns the value or reference at the intersection of a given row and column in a range.', 'usecase' => 'Combine with <code>MATCH</code> for two-way lookups or lookups to the left.'],
+    'INDIRECT' => ['desc' => 'Converts a text string into a cell or range reference.', 'usecase' => 'Pull data from a sheet whose name is typed in a cell, such as a monthly report sheet.'],
+    'LOOKUP' => ['desc' => 'Searches a single row or column sorted in ascending order and returns the value in the same position from a second row or column.'],
+    'MATCH' => ['desc' => 'Returns the relative position of a value in a range.', 'usecase' => 'Pair with <code>INDEX</code> to find a row or column number dynamically.'],
+    'OFFSET' => ['desc' => 'Returns a reference shifted a given number of rows and columns from a starting cell, with an optional height and width.', 'usecase' => 'Build a dynamic range, such as a rolling 12-month total that moves as new data is added.'],
+    'ROW' => ['desc' => 'Returns the row number of a cell reference.'],
+    'ROWS' => ['desc' => 'Returns the number of rows in a range or array.'],
+    'SORT' => ['desc' => 'Sorts the contents of a range or array, and the result updates when the source data changes.', 'sample' => 'The range sorted by column 2, descending'],
+    'SORTBY' => ['desc' => 'Sorts a range or array based on the values in a corresponding range.'],
+    'TAKE' => ['desc' => 'Returns a set number of rows or columns from the start or end of an array.', 'sample' => 'First 5 rows'],
+    'TOCOL' => ['desc' => 'Returns an array as a single column.'],
+    'TOROW' => ['desc' => 'Returns an array as a single row.'],
+    'TRANSPOSE' => ['desc' => 'Switches rows to columns and columns to rows.', 'sample' => 'A horizontal row becomes a vertical column'],
+    'UNIQUE' => ['desc' => 'Returns a list of unique values from a range or array.', 'sample' => 'List of unique values in column A'],
+    'VLOOKUP' => ['desc' => 'Searches the first column of a table and returns a value from the column you specify in the same row; set the last argument to FALSE or 0 for an exact match.', 'usecase' => 'Look up a product\'s price or name from its product code.', 'sample' => 'Value from column 3 of Products for an exact match on A2'],
+    'VSTACK' => ['desc' => 'Stacks arrays vertically, one below the other, into a single array.'],
+    'WRAPCOLS' => ['desc' => 'Rearranges a single row or column of values into a two-dimensional array, column by column, after a set number of values.'],
+    'WRAPROWS' => ['desc' => 'Rearranges a single row or column of values into a two-dimensional array, row by row, after a set number of values.'],
+    'XLOOKUP' => ['desc' => 'Searches a range and returns the item at the matching position in another range, with exact match by default, lookups to the left, and a fallback value when nothing is found.', 'usecase' => 'Replace <code>VLOOKUP</code> in new workbooks, for example to find a price from a product code.'],
+    'XMATCH' => ['desc' => 'Returns the relative position of a value in a range, with exact match by default plus wildcard matching and searching from the end.'],
+];

@@ -1,0 +1,43 @@
+<?php
+
+declare(strict_types=1);
+
+// Teks EN rujukan fungsi (text); kunci = name dalam config/formulas/text.php, susunan sama.
+return [
+    'ARRAYTOTEXT' => ['desc' => 'Returns an array or range as a single text string, in either a concise format or a strict format that can be entered back as a formula.'],
+    'ASC' => ['desc' => 'Changes full-width (double-byte) characters to half-width (single-byte) characters for languages that use double-byte character sets.'],
+    'BAHTTEXT' => ['desc' => 'Converts a number to Thai text and adds the word "Baht".'],
+    'CHAR' => ['desc' => 'Returns the character for a code number from 1 to 255 in your computer\'s character set.'],
+    'CLEAN' => ['desc' => 'Removes nonprintable characters (codes 0 to 31) from text.', 'usecase' => 'Cleaning text imported from another system before analysis.'],
+    'CODE' => ['desc' => 'Returns the code number of the first character in a text string.'],
+    'CONCAT' => ['desc' => 'Joins text from multiple values or ranges into one string and replaces <code>CONCATENATE</code>.', 'usecase' => 'Combining a branch code, year, and serial number into a single reference number.'],
+    'CONCATENATE' => ['desc' => 'Joins several text values into one string and has been superseded by <code>CONCAT</code> or the <code>&</code> operator.'],
+    'DBCS' => ['desc' => 'Changes half-width (single-byte) characters to full-width (double-byte) characters.'],
+    'DOLLAR' => ['desc' => 'Converts a number to text in currency format, using the currency symbol from your system\'s regional settings.'],
+    'EXACT' => ['desc' => 'Compares two text strings, taking letter case into account, and returns <code>TRUE</code> only if they are exactly the same.', 'sample' => 'FALSE'],
+    'FIND' => ['desc' => 'Returns the starting position of one text string within another, matching letter case and without wildcard support.'],
+    'FIXED' => ['desc' => 'Rounds a number to a specified number of decimal places and returns it as text, with or without thousands separators.'],
+    'LEFT' => ['desc' => 'Returns a specified number of characters from the start (left) of a text string.', 'usecase' => 'Extracting a three-letter prefix from a product code.', 'sample' => 'First 3 characters of A2'],
+    'LEN' => ['desc' => 'Returns the number of characters in a text string, including spaces.', 'usecase' => 'Checking that every ID number in a list has exactly 12 digits.'],
+    'LOWER' => ['desc' => 'Converts all letters in a text string to lowercase.', 'usecase' => 'Standardizing email addresses before comparing them or removing duplicates.'],
+    'MID' => ['desc' => 'Returns a specified number of characters from the middle of a text string, starting at the position you give.', 'usecase' => 'Extracting a fixed segment, such as a region code, from a structured ID or account number.'],
+    'NUMBERVALUE' => ['desc' => 'Converts text to a number using the decimal and group separators you specify, independent of regional settings.'],
+    'PROPER' => ['desc' => 'Capitalizes the first letter of each word and converts the remaining letters to lowercase.', 'usecase' => 'Tidying customer names that were typed in all capitals or all lowercase.'],
+    'REPLACE' => ['desc' => 'Replaces part of a text string, identified by position and number of characters, with new text.'],
+    'REPT' => ['desc' => 'Repeats text a specified number of times.', 'usecase' => 'Drawing a simple bar chart inside a cell, e.g. one bar for every RM1,000 of sales.', 'sample' => '"|||||" when B2 is 5000'],
+    'RIGHT' => ['desc' => 'Returns a specified number of characters from the end (right) of a text string.', 'sample' => 'Last 4 characters of A2'],
+    'SEARCH' => ['desc' => 'Returns the starting position of one text string within another, ignoring letter case and supporting wildcards.'],
+    'SUBSTITUTE' => ['desc' => 'Replaces specific text with new text, either every occurrence or only the occurrence you specify.', 'usecase' => 'Removing dashes from phone numbers.'],
+    'T' => ['desc' => 'Returns the value if it is text, and empty text if it is not.'],
+    'TEXT' => ['desc' => 'Converts a value to text in a number format you specify, such as currency, percentage, or date.', 'usecase' => 'Showing a KPI inside a sentence on a dashboard, such as "Sales up 25.0%".'],
+    'TEXTAFTER' => ['desc' => 'Returns the text that appears after a given delimiter.'],
+    'TEXTBEFORE' => ['desc' => 'Returns the text that appears before a given delimiter.'],
+    'TEXTJOIN' => ['desc' => 'Joins text from multiple values or ranges with a delimiter between them and can skip empty cells.', 'usecase' => 'Combining a column of names into a single comma-separated line.'],
+    'TEXTSPLIT' => ['desc' => 'Splits text into columns, rows, or both, using the delimiters you specify.'],
+    'TRIM' => ['desc' => 'Removes spaces from the start and end of text and reduces repeated spaces between words to a single space.', 'usecase' => 'Cleaning imported CSV data before a <code>VLOOKUP</code> so that hidden spaces do not cause failed matches.'],
+    'UNICHAR' => ['desc' => 'Returns the Unicode character for a given code number.'],
+    'UNICODE' => ['desc' => 'Returns the Unicode code number of the first character in a text string.'],
+    'UPPER' => ['desc' => 'Converts all letters in a text string to uppercase.', 'usecase' => 'Standardizing product or branch codes so they are all in capitals.'],
+    'VALUE' => ['desc' => 'Converts text that represents a number into a numeric value.', 'usecase' => 'Fixing numbers stored as text so they can be added up.'],
+    'VALUETOTEXT' => ['desc' => 'Returns any value as text, in either a concise or a strict format.'],
+];

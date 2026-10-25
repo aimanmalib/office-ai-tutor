@@ -1,0 +1,328 @@
+/* Laman awam v2 — token reka bentuk + komponen. Dibina oleh bina.sh → public/assets/css/tw.css.
+   Warna dalam format "R G B" supaya Tailwind boleh menambah alfa (bg-ink/5). Tema: [data-tema] pada <html>
+   (dipilih pengguna, disimpan localStorage) atau ikut sistem. Aksen: [data-subjek] pada <html>. */
+
+@font-face { font-family: 'Geist'; src: url('../fonts/geist.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: 'Geist Mono'; src: url('../fonts/geist-mono.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 250 250 249; --surface: 255 255 255; --surface-2: 244 244 242; --surface-3: 234 234 231;
+    --ink: 23 23 23; --ink-2: 68 68 68; --muted: 107 107 107;
+    --line: 229 228 225; --line-2: 212 210 206;
+    --ok: 21 128 61; --ok-soft: 220 252 231; --err: 185 28 28; --err-soft: 254 226 226;
+    --warn: 161 98 7; --warn-soft: 254 243 199;
+    --excel: 21 128 61; --word: 29 78 216; --powerpoint: 194 65 12;
+    --accent: 23 23 23; --accent-soft: 236 236 234; --accent-ink: 23 23 23; --atas-aksen: 255 255 255;
+    /* kedalaman (REKA.md §2): bayang berlapis atas ink alfa rendah; cahaya aksen STATIK di belakang hero/kad utama */
+    --bayang: var(--ink); --bayang-a1: .06; --bayang-a2: .06; --bayang-a3: .08; --bayang-a4: .12;
+    --shadow-kad: 0 1px 2px rgb(var(--bayang) / var(--bayang-a1)), 0 8px 24px rgb(var(--bayang) / var(--bayang-a2));
+    --shadow-tingkap: 0 1px 3px rgb(var(--bayang) / var(--bayang-a3)), 0 24px 60px rgb(var(--bayang) / var(--bayang-a4));
+    --glow-a: .2; --glow: rgb(var(--accent) / var(--glow-a));
+    --tirai: 23 23 23;                       /* latar dialog modal */
+    --jejari-kad: 12px; --jejari-tingkap: 16px;
+    --gerak: 220ms cubic-bezier(.2, .7, .2, 1);
+    color-scheme: light;
+  }
+  [data-subjek="utama"], [data-subjek="excel"] { --accent: var(--excel); --accent-soft: 220 252 231; --accent-ink: 20 83 45; }
+  [data-subjek="word"] { --accent: var(--word); --accent-soft: 219 234 254; --accent-ink: 30 58 138; }
+  [data-subjek="powerpoint"] { --accent: var(--powerpoint); --accent-soft: 255 237 213; --accent-ink: 124 45 18; }
+
+  /* gelap: permukaan LEBIH CERAH daripada latar (tiga aras), garis kelihatan, cahaya aksen lebih kuat */
+  [data-tema="gelap"] {
+    --bg: 10 10 12; --surface: 22 22 25; --surface-2: 30 30 34; --surface-3: 42 42 47;
+    --ink: 237 237 237; --ink-2: 190 190 190; --muted: 150 150 150;
+    --line: 46 46 52; --line-2: 66 66 73;
+    --ok: 74 222 128; --ok-soft: 20 46 30; --err: 248 113 113; --err-soft: 60 22 22;
+    --warn: 250 204 21; --warn-soft: 56 44 10;
+    --excel: 74 222 128; --word: 96 165 250; --powerpoint: 251 146 60;
+    --accent: 237 237 237; --accent-soft: 38 38 42; --accent-ink: 237 237 237; --atas-aksen: 10 10 12;
+    --bayang: 0 0 0; --bayang-a1: .5; --bayang-a2: .45; --bayang-a3: .6; --bayang-a4: .55;
+    --glow-a: .22; --tirai: 0 0 0;
+    color-scheme: dark;
+  }
+  [data-tema="gelap"][data-subjek="utama"], [data-tema="gelap"][data-subjek="excel"] { --accent: var(--excel); --accent-soft: 20 46 30; --accent-ink: 187 247 208; }
+  [data-tema="gelap"][data-subjek="word"] { --accent: var(--word); --accent-soft: 23 37 66; --accent-ink: 191 219 254; }
+  [data-tema="gelap"][data-subjek="powerpoint"] { --accent: var(--powerpoint); --accent-soft: 60 30 14; --accent-ink: 254 215 170; }
+  /* elemen dengan data-subjek di dalam halaman (kad subjek, jubin) mewarisi aksen subjek itu dalam tema gelap juga */
+  [data-tema="gelap"] [data-subjek="excel"] { --accent: var(--excel); --accent-soft: 20 46 30; --accent-ink: 187 247 208; }
+  [data-tema="gelap"] [data-subjek="word"] { --accent: var(--word); --accent-soft: 23 37 66; --accent-ink: 191 219 254; }
+  [data-tema="gelap"] [data-subjek="powerpoint"] { --accent: var(--powerpoint); --accent-soft: 60 30 14; --accent-ink: 254 215 170; }
+  /* --glow dikira semula pada setiap elemen bersubjek (pemboleh ubah yang merujuk var() dikira di tempat ia diisytihar) */
+  [data-subjek] { --glow: rgb(var(--accent) / var(--glow-a)); }
+
+  html { -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; scroll-padding-top: 5rem; }
+  body { @apply bg-bg text-ink font-sans antialiased; font-feature-settings: "ss01", "cv11"; }
+  ::selection { background: rgb(var(--accent) / 0.18); }
+  :focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 2px; border-radius: 4px; }
+  code, kbd, pre { font-family: theme('fontFamily.mono'); }
+  [hidden] { display: none !important; }
+  input[type=search]::-webkit-search-cancel-button, input[type=search]::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+  /* iOS Safari zum masuk bila medan < 16px */
+  @media (max-width: 767px) { input, textarea, select { font-size: 16px !important; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+}
+
+@layer components {
+  .bekas { @apply mx-auto w-full max-w-tapak px-5 sm:px-6 lg:px-8; }
+  .eyebrow { @apply text-[0.8125rem] font-medium text-muted tracking-tight; }
+
+  .btn { @apply inline-flex items-center justify-center gap-2 h-11 sm:h-10 px-4 rounded-md text-sm font-medium select-none whitespace-nowrap
+                 disabled:opacity-50 disabled:pointer-events-none;
+         transition: background-color var(--gerak), border-color var(--gerak), color var(--gerak); }
+  /* tekan: turun 1 px (transform sahaja; warna tidak beranimasi pada masa yang sama kerana :active serta-merta) */
+  .btn:active:not(:disabled) { transform: translateY(1px); }
+  .btn-lg { @apply h-11 px-5 text-[0.9375rem]; }
+  .btn-sm { @apply h-11 sm:h-8 px-3 text-[0.8125rem]; }
+  /* butang utama = aksen subjek halaman (REKA §1.1); .btn-aksen = nama lama yang sama */
+  .btn-utama, .btn-aksen { @apply bg-accent text-atas-aksen hover:bg-accent/90;
+    box-shadow: inset 0 1px 0 rgb(var(--atas-aksen) / .18), 0 1px 2px rgb(var(--bayang) / var(--bayang-a3)); }
+  .btn-bahaya { @apply bg-err text-atas-aksen hover:bg-err/90; }
+  .btn-kedua { @apply bg-surface text-ink border border-line hover:bg-surface-2 hover:border-line-2; }
+  .btn-hantu { @apply text-ink-2 hover:text-ink hover:bg-ink/5; }
+  .btn-ikon { @apply inline-flex items-center justify-center h-11 w-11 sm:h-10 sm:w-10 rounded-md text-ink-2 hover:text-ink hover:bg-ink/5 transition-colors; }
+
+  .kad { @apply bg-surface border border-line rounded-lg; }
+  .kad-pautan { @apply kad transition-colors hover:border-line-2 hover:bg-surface-2/40; }
+
+  /* ---- arah "buku kerja yang hidup" (REKA.md) ---- */
+  /* kad penting: bayang berlapis; hover = naik 2 px (transform) + bayang lebih dalam pada ::after (opacity) — satu sifat setiap elemen */
+  .kad-timbul { @apply relative bg-surface border border-line; border-radius: var(--jejari-kad); box-shadow: var(--shadow-kad);
+                transition: transform var(--gerak); }
+  .kad-timbul::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+                       box-shadow: var(--shadow-tingkap); opacity: 0; transition: opacity var(--gerak); }
+  a.kad-timbul:hover, .kad-timbul.boleh-tekan:hover { transform: translateY(-2px); }
+  a.kad-timbul:hover::after, .kad-timbul.boleh-tekan:hover::after { opacity: 1; }
+  /* lapisan hiasan kad (jalur, cahaya, ikon besar) — dipotong di sini supaya bayang hover kad tidak dipotong */
+  .hiasan { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; }
+  /* tetingkap aplikasi (hamparan hero, skrin soalan): bar tajuk beraksen + bayang dalam */
+  .tingkap { @apply relative bg-surface border border-line overflow-hidden; border-radius: var(--jejari-tingkap); box-shadow: var(--shadow-tingkap); }
+  .tingkap-bar { @apply flex items-center gap-3 px-4 h-11 bg-accent text-atas-aksen; }
+  .tingkap-titik { @apply flex gap-1.5; } .tingkap-titik i { @apply block w-2.5 h-2.5 rounded-full bg-atas-aksen/35; }
+  /* jubin ikon: aksen lembut + ikon beraksen */
+  .jubin { @apply grid place-items-center shrink-0 w-11 h-11 bg-accent-soft text-accent; border-radius: 10px;
+           box-shadow: inset 0 0 0 1px rgb(var(--accent) / .16); }
+  .jubin-sm { @apply w-9 h-9; border-radius: 8px; }
+  .jubin-lg { @apply w-14 h-14; border-radius: 14px; }
+  /* eyebrow beraksen: nombor mono 01 · label */
+  .eyebrow-aksen { @apply inline-flex items-center gap-2 font-mono text-[0.75rem] font-medium uppercase tracking-[0.12em] text-accent; }
+  .eyebrow-aksen::before { content: ''; @apply block w-5 h-px bg-accent; }
+  /* jalur identiti tiga subjek (laman utama, kaki laman, header) */
+  .jalur { @apply flex h-[3px] w-full; } .jalur > i { @apply flex-1; }
+  .jalur-x { background: rgb(var(--excel)); } .jalur-w { background: rgb(var(--word)); } .jalur-p { background: rgb(var(--powerpoint)); }
+  /* cahaya aksen statik di belakang hero/tetingkap (tiada filter, tiada animasi) */
+  .cahaya { background: radial-gradient(closest-side, var(--glow), transparent); }
+  /* irama bahagian */
+  .bahagian { @apply py-16 sm:py-24 lg:py-28; }
+  .bahagian-alt { @apply bg-surface-2/60 border-y border-line; }
+  .tajuk-bahagian { @apply mt-4 font-semibold tracking-[-0.025em] text-[1.75rem] leading-[1.12] sm:text-[2.25rem]; }
+  /* angka statistik */
+  .angka { @apply font-mono font-semibold tabular-nums text-[1.375rem] leading-none tracking-tight text-ink; }
+  /* nav subjek: garis aksen pada halaman semasa */
+  .nav-pautan { @apply relative h-16 px-3 inline-flex items-center text-sm text-ink-2 hover:text-ink; transition: color var(--gerak); }
+  .nav-pautan[aria-current="page"] { @apply text-ink font-medium; }
+  .nav-pautan[aria-current="page"]::after { content: ''; @apply absolute left-3 right-3 bottom-0 h-0.5 rounded-full bg-accent; }
+
+  /* muncul semasa tatal (tapak.js, IntersectionObserver): PEMBALUT = opacity, anak = translate — satu sifat setiap elemen.
+     html.gerak ditetapkan dalam <head> hanya bila IO ada + tiada prefers-reduced-motion; tanpa JS semuanya kelihatan.
+     Selepas gerak tamat tapak.js menukar data-muncul="siap": peraturan di bawah berhenti terpakai, jadi peralihan kad sendiri
+     (.kad-timbul = transform) berkuat kuasa semula dan hover tidak bertembung dengan translate muncul (U6). */
+  html.gerak [data-muncul]:not([data-muncul="siap"]) { opacity: 0; transition: opacity 450ms ease-out; }
+  html.gerak [data-muncul]:not([data-muncul="siap"]) > * { translate: 0 12px; transition: translate 450ms cubic-bezier(.2, .7, .2, 1); }
+  html.gerak [data-muncul]:not([data-muncul="siap"]) > :nth-child(2) { transition-delay: 60ms; }
+  html.gerak [data-muncul]:not([data-muncul="siap"]) > :nth-child(3) { transition-delay: 120ms; }
+  html.gerak [data-muncul].muncul { opacity: 1; } html.gerak [data-muncul].muncul > * { translate: none; }
+
+  /* sel hasil demo hero: berkelip SEKALI bila formula dinilai (lapisan ::after, opacity sahaja) */
+  @keyframes kelip { 0% { opacity: 0; } 30% { opacity: .55; } 100% { opacity: 0; } }
+  .hamparan td.sasaran { position: relative; }
+  .hamparan td.sasaran.kelip::after { content: ''; position: absolute; inset: 0; background: rgb(var(--accent)); opacity: 0;
+                                      animation: kelip 900ms ease-out 1; pointer-events: none; }
+  .garis { @apply border-line; }
+  /* halaman subjek (U2): panel angka = sel hamparan berlabel A1..B2 (label hiasan dari data-sel, bukan teks) */
+  .sel-angka { @apply relative flex flex-col px-5 pt-9 pb-5 sm:px-6 sm:pt-10 sm:pb-6; }
+  .sel-angka::before { content: attr(data-sel); @apply absolute left-5 top-3.5 sm:left-6 font-mono text-[0.6875rem] text-muted; }
+  /* bilangan dalam kad (mono, tabular) */
+  .lencana-angka { @apply inline-flex items-center h-6 px-2 rounded-md bg-surface-2 border border-line font-mono text-[0.75rem] text-ink-2 tabular-nums whitespace-nowrap; }
+  /* cip beraksen: hover = warna sahaja (tiada gerak) */
+  .cip-aksen { @apply h-11 sm:h-10 px-3.5 text-[0.8125rem] font-medium text-ink hover:border-accent/50 hover:bg-accent-soft hover:text-accent-ink; }
+
+  /* halaman rujukan (U3): kepala halaman bergrid aksen, sauh sisi dengan bahagian aktif, kepala bahagian melekat, jalur jadual */
+  .grid-aksen { background-image: linear-gradient(rgb(var(--accent) / .10) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--accent) / .10) 1px, transparent 1px);
+                background-size: 32px 32px; -webkit-mask-image: radial-gradient(ellipse 80% 70% at 80% 30%, black 10%, transparent 70%);
+                mask-image: radial-gradient(ellipse 80% 70% at 80% 30%, black 10%, transparent 70%); }
+  .sauh { @apply border-l border-line space-y-0.5; }
+  .sauh a { @apply -ml-px flex items-baseline gap-3 pl-3.5 pr-2 py-1.5 border-l-2 border-transparent text-ink-2 hover:text-ink; transition: color var(--gerak); }
+  .sauh a[aria-current="true"] { @apply text-ink font-medium border-accent; }
+  .sauh a[aria-current="true"] > span:first-child { @apply text-accent; }
+  .kepala-bahagian { @apply flex items-center gap-3.5 pb-4 border-b border-line lg:sticky lg:top-[4.1875rem] lg:z-10 lg:pt-3 bg-bg; }
+  .baris-jalur:nth-child(even) { background: rgb(var(--surface-2) / .55); }
+  /* dua lajur bersebelahan berjalur sendiri-sendiri = papan dam (tinggi baris berbeza): md+ = garis pemisah sahaja */
+  @media (min-width: 768px) { .dua-lajur .baris-jalur:nth-child(even) { background: transparent; } }
+  .nota-aksen { @apply flex gap-2.5 rounded-lg px-4 py-3.5 text-sm text-ink-2 bg-accent-soft/40 border border-accent/15 border-l-[3px] border-l-accent; }
+  /* butang salin: tanda semak (garis CSS, tiada SVG tambahan) menggantikan ikon selama 1.4 s */
+  [data-salin] { position: relative; }
+  [data-salin].disalin { @apply text-ok; }
+  [data-salin].disalin > svg { opacity: 0; }
+  [data-salin].disalin::after { content: ''; position: absolute; left: 50%; top: 50%; width: .75rem; height: .4rem; margin: -.3rem 0 0 -.375rem;
+                                border-left: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); }
+  /* kotak contoh formula = bar formula: prefiks fx */
+  .bar-fx { @apply flex items-center gap-2 rounded-lg bg-surface-2 border border-line pl-0 pr-0.5 h-11 overflow-hidden; }
+  .bar-fx::before { content: 'fx'; @apply self-stretch grid place-items-center px-3 border-r border-line font-mono italic text-[0.8125rem] font-semibold text-accent bg-accent-soft/50; }
+
+  /* latihan + makmal (U4): skrin soalan = tetingkap, medan formula besar dengan kotak nama + fx, maklum balas masuk 160 ms */
+  .trek { @apply block h-1.5 rounded-full bg-surface-3 overflow-hidden; box-shadow: inset 0 0 0 1px rgb(var(--line)); }
+  .segmen { @apply flex items-center gap-[3px] min-w-0; } .segmen > i { @apply flex-1 h-1.5 rounded-full bg-surface-3; }
+  .segmen > i.betul { @apply bg-ok; } .segmen > i.salah { @apply bg-err/70; } .segmen > i.semasa { @apply bg-accent; }
+  .medan-fx { @apply flex items-stretch rounded-xl border border-line-2 bg-surface overflow-hidden; box-shadow: var(--shadow-kad);
+              transition: border-color var(--gerak); }
+  .medan-fx:focus-within { @apply border-accent ring-4 ring-accent/15; }
+  .medan-fx-nama { @apply w-14 sm:w-16 shrink-0 grid place-items-center border-r border-line bg-surface-2 font-mono text-xs font-medium text-ink-2; }
+  .medan-fx-fx { @apply shrink-0 px-3 grid place-items-center border-r border-line bg-accent-soft/50 font-mono italic text-sm font-semibold text-accent; }
+  .medan-fx > input { @apply flex-1 min-w-0 h-12 sm:h-14 px-3.5 bg-transparent font-mono text-base sm:text-[1.0625rem] text-ink placeholder:text-muted
+                             focus:outline-none disabled:text-ink-2; }
+  .medan-fx > input:focus-visible { outline: none; }
+  .pilihan { @apply w-full text-left flex items-center gap-3.5 px-4 py-3.5 rounded-xl border border-line bg-surface hover:border-line-2 hover:bg-surface-2/50;
+             transition: border-color var(--gerak), background-color var(--gerak); }
+  .pilihan-huruf { @apply grid place-items-center w-8 h-8 shrink-0 rounded-lg border border-line-2 bg-surface-2 font-mono text-[0.8125rem] font-semibold text-ink-2; }
+  .pilihan[aria-checked="true"] { @apply border-accent bg-accent-soft/60 hover:bg-accent-soft/60; box-shadow: inset 0 0 0 1px rgb(var(--accent)); }
+  .pilihan[aria-checked="true"] .pilihan-huruf { @apply bg-accent border-accent text-atas-aksen; }
+  .pilihan[data-hasil="betul"] { @apply border-ok bg-ok-soft hover:bg-ok-soft; box-shadow: inset 0 0 0 1px rgb(var(--ok)); }
+  .pilihan[data-hasil="betul"] .pilihan-huruf { @apply bg-ok border-ok text-atas-aksen; }
+  .pilihan[data-hasil="salah"] { @apply border-err bg-err-soft hover:bg-err-soft; box-shadow: inset 0 0 0 1px rgb(var(--err)); }
+  .pilihan[data-hasil="salah"] .pilihan-huruf { @apply bg-err border-err text-atas-aksen; }
+  .maklum { @apply flex gap-3.5 rounded-xl border border-l-[3px] p-4 sm:p-5; }
+  .maklum-betul { @apply border-ok/30 border-l-ok bg-ok-soft; } .maklum-salah { @apply border-err/30 border-l-err bg-err-soft; }
+  .maklum-neutral { @apply border-line border-l-accent bg-surface-2; }
+  .maklum-ikon { @apply grid place-items-center w-9 h-9 shrink-0 rounded-lg text-atas-aksen; }
+  .maklum-betul .maklum-ikon { @apply bg-ok; } .maklum-salah .maklum-ikon { @apply bg-err; } .maklum-neutral .maklum-ikon { @apply bg-accent; }
+  /* masuk: pembalut = opacity, anak = translate (satu sifat setiap elemen; reduced-motion = serta-merta) */
+  @keyframes masuk-y { from { translate: 0 6px; } to { translate: none; } }
+  .masuk { animation: masuk 160ms ease-out; } .masuk > * { animation: masuk-y 160ms ease-out; }
+  .hamparan td.sasaran.pratonton { @apply font-normal italic; }   /* warna penuh accent-ink: alfa gagal kontras axe */
+  /* cincin skor (SVG stroke = currentColor; dasharray dari JS) */
+  .cincin circle { fill: none; stroke: currentColor; stroke-width: 3; }
+  .cincin .isi { stroke-linecap: round; transition: stroke-dasharray 700ms cubic-bezier(.2, .7, .2, 1); }
+  /* makmal: kepala baris/lajur sel aktif beraksen seperti Excel */
+  .hamparan th.aktif { @apply bg-accent-soft text-accent-ink font-semibold; }
+  .hamparan td.pilih { background: rgb(var(--accent-soft) / .45); }
+
+  /* tutor AI (U5): gelembung bertoken (pengguna = aksen lembut, AI = permukaan bergaris + bayang), avatar jubin, komposer
+     beraksen bila fokus, penunjuk menaip = tiga titik opacity sahaja */
+  .avatar-ai { @apply jubin w-8 h-8 mt-0.5; border-radius: 9px; }
+  .titik-status { @apply inline-block w-2 h-2 shrink-0 rounded-full bg-ok; box-shadow: 0 0 0 3px rgb(var(--ok) / .18); }
+  .titik-status.rehat { @apply bg-warn; box-shadow: 0 0 0 3px rgb(var(--warn) / .2); }
+  .gelembung-saya { @apply max-w-[85%] rounded-2xl rounded-br-md px-4 py-2.5 bg-accent-soft text-ink border border-accent/20; }
+  .gelembung-ai { @apply min-w-0 flex-1 rounded-2xl rounded-tl-md px-4 py-3 sm:px-5 sm:py-4 bg-surface border border-line; box-shadow: var(--shadow-kad); }
+  .gelembung-ai.ralat { @apply bg-err-soft border-err/30 text-err; box-shadow: none; }
+  .gelembung-ai .prosa pre { @apply bg-surface-2; }
+  @keyframes titik { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+  .menaip { @apply inline-flex items-center gap-1.5 h-10 px-4 rounded-2xl rounded-tl-md bg-surface border border-line; box-shadow: var(--shadow-kad); }
+  .menaip i { @apply block w-1.5 h-1.5 rounded-full bg-accent; opacity: .25; animation: titik 1.2s ease-in-out infinite; }
+  .menaip i:nth-child(2) { animation-delay: 160ms; } .menaip i:nth-child(3) { animation-delay: 320ms; }
+  .komposer { @apply flex items-end gap-1.5 p-1.5 bg-surface border border-line-2 rounded-2xl; box-shadow: var(--shadow-kad);
+              transition: border-color var(--gerak); }
+  .komposer:focus-within { @apply border-accent ring-4 ring-accent/15; }
+  .komposer .btn-utama { @apply rounded-xl; }
+  .cadangan { @apply flex items-center gap-3 px-3.5 py-3 text-left text-sm text-ink; }
+  .cadangan > svg:last-child { @apply shrink-0 text-muted; transition: color var(--gerak); }
+  .cadangan:hover > svg:last-child { @apply text-accent; }
+  /* widget: panel = tetingkap dengan kepala aksen lembut; butang terapung beraksen dengan bayang tetingkap */
+  .widget-panel { @apply bg-surface border-line; box-shadow: var(--shadow-tingkap); }
+  @media (min-width: 640px) { .widget-panel { border-radius: var(--jejari-tingkap); } }
+  .widget-kepala { @apply flex items-center justify-between gap-2 pl-3 pr-1.5 h-14 border-b border-line shrink-0 bg-accent-soft/50; }
+  .widget-togol { box-shadow: var(--shadow-tingkap), inset 0 1px 0 rgb(var(--atas-aksen) / .18); }
+
+  .medan { @apply w-full h-11 sm:h-10 px-3 rounded-md bg-surface border border-line text-[0.9375rem] text-ink placeholder:text-muted
+                  transition-colors focus:outline-none focus:border-accent/60 focus:ring-4 focus:ring-accent/15; }
+  .medan-mono { @apply medan font-mono text-[0.875rem]; }
+
+  .cip { @apply inline-flex items-center gap-1.5 h-11 sm:h-8 px-3 rounded-full border border-line bg-surface text-[0.8125rem] text-ink-2
+                transition-colors hover:border-line-2 hover:text-ink; }
+  .cip[aria-pressed="true"], .cip.aktif { @apply bg-accent text-atas-aksen border-accent; }
+  /* bilangan dalam cip tapisan: token muted (opacity atas latar aksen gagal kontras axe), penuh atas-aksen bila aktif */
+  .cip-bil { @apply tabular-nums text-muted; } .cip[aria-pressed="true"] .cip-bil { @apply text-atas-aksen font-semibold; }
+
+  .lencana { @apply inline-flex items-center gap-1 h-5 px-1.5 rounded text-[0.6875rem] font-medium bg-surface-2 text-ink-2 border border-line; }
+
+  kbd, .kbd { @apply inline-flex items-center justify-center min-w-[1.75rem] h-7 px-1.5 rounded-md border border-line-2 bg-surface
+                     font-mono text-[0.75rem] font-medium text-ink shadow-[inset_0_-1px_0_rgb(var(--line-2))]; }
+  .kod { @apply font-mono text-[0.8125rem] px-1.5 py-0.5 rounded bg-surface-2 border border-line text-ink; }
+
+  .pautan { @apply text-ink underline decoration-line-2 underline-offset-4 hover:decoration-ink transition-colors; }
+  .pautan-aksen { @apply text-accent hover:underline underline-offset-4; }
+
+  /* teks kandungan (soalan latihan, penerangan) */
+  .teks :where(code) { @apply kod; }
+  .teks :where(strong) { @apply font-semibold text-ink; }
+
+  /* Jawapan AI (markdown → DOMPurify) */
+  .prosa { @apply text-[0.9375rem] leading-relaxed text-ink; }
+  .prosa > :first-child { margin-top: 0; } .prosa > :last-child { margin-bottom: 0; }
+  .prosa p { margin: .6em 0; }
+  .prosa ul, .prosa ol { margin: .6em 0; padding-left: 1.25em; }
+  .prosa ul { list-style: disc; } .prosa ol { list-style: decimal; }
+  .prosa li { margin: .25em 0; } .prosa li::marker { color: rgb(var(--muted)); }
+  .prosa h1, .prosa h2, .prosa h3 { @apply font-semibold text-ink; margin: 1em 0 .4em; font-size: 1em; }
+  .prosa strong { @apply font-semibold; }
+  .prosa a { @apply pautan; }
+  .prosa code { @apply kod; }
+  .prosa pre { @apply my-3 p-3 rounded-md bg-surface-2 border border-line overflow-x-auto text-[0.8125rem] leading-relaxed; }
+  .prosa pre code { @apply p-0 border-0 bg-transparent; }
+  .prosa blockquote { @apply border-l-2 border-line-2 pl-3 text-ink-2; }
+  .prosa table { @apply my-3 w-full text-[0.875rem] border-collapse; display: block; overflow-x: auto; }
+  .prosa th, .prosa td { @apply border border-line px-2 py-1 text-left; }
+  .prosa th { @apply bg-surface-2 font-medium; }
+
+  /* Grid hamparan (latihan + playground) */
+  .hamparan { @apply border-collapse font-mono text-[0.8125rem] tabular-nums bg-surface; }
+  .hamparan th, .hamparan td { @apply border border-line h-8 px-2.5 whitespace-nowrap; }
+  .hamparan thead th, .hamparan thead td, .hamparan tbody th { @apply bg-surface-2 text-muted font-normal text-[0.75rem] text-center px-0 min-w-[2.25rem]; }
+  .hamparan td.sasaran { @apply bg-accent-soft text-accent-ink font-semibold; outline: 2px solid rgb(var(--accent)); outline-offset: -2px; }
+  .hamparan td.pilih { outline: 2px solid rgb(var(--accent)); outline-offset: -2px; }
+  .hamparan td.tajuk { @apply font-semibold; }
+  .hamparan td.nombor { @apply text-right; }
+  .hamparan td.ralat { @apply text-err; }
+
+  /* Baris rujukan fungsi (≈500 baris: kelas pendek supaya halaman ringan) */
+  .fn { @apply scroll-mt-40; }
+  .fn > summary { @apply list-none cursor-pointer flex flex-wrap sm:flex-nowrap items-start sm:items-center gap-x-4 gap-y-1 px-4 sm:px-5 py-3 hover:bg-accent-soft/30; transition: background-color var(--gerak); }
+  .fn[open] { background: rgb(var(--surface-2) / .5); box-shadow: inset 3px 0 0 rgb(var(--accent)); }
+  .fn[open] > summary .fn-n { @apply text-accent; }
+  .fn > summary::-webkit-details-marker { display: none; }
+  .fn > summary::after { content: ''; @apply hidden sm:block w-2 h-2 shrink-0 border-r-[1.5px] border-b-[1.5px] border-muted -rotate-45; transition: transform var(--gerak); }
+  .fn[open] > summary::after { @apply rotate-45; }
+  .fn-n { @apply font-mono text-sm font-semibold w-full sm:w-44 shrink-0 flex items-center gap-1.5; }
+  .fn-n i { @apply w-1.5 h-1.5 rounded-full bg-accent; }
+  .fn-d { @apply flex-1 min-w-0 text-sm text-ink-2; }
+  .fn > summary .lencana { @apply shrink-0 hidden sm:inline-flex; }
+  /* butiran dibuka: masuk lembut (opacity sahaja; reduced-motion = serta-merta) */
+  @keyframes masuk { from { opacity: 0; } to { opacity: 1; } }
+  .fn[open] > .fn-b { animation: masuk 200ms ease-out; }
+  .fn-b { @apply px-4 sm:px-5 pb-5 pt-1 sm:pl-[13.25rem] space-y-3 text-sm text-ink-2; }
+  .fn-b b { @apply font-medium text-ink; }
+  .fn-s { @apply font-mono text-xs text-muted break-words; }
+  .fn-c { @apply bar-fx max-w-xl text-ink; }
+  .fn-c code { @apply flex-1 min-w-0 font-mono text-[0.8125rem] truncate; }
+  .fn-c span { @apply font-mono text-xs text-muted shrink-0 max-w-[40%] truncate; }
+  .fn-c .btn-ikon { @apply h-9 w-9 shrink-0; }
+
+  /* kawasan tatal mendatar bertanda (jadual lebar di telefon) */
+  .tatal-x { @apply overflow-x-auto; -webkit-overflow-scrolling: touch; }
+}
+
+@layer utilities {
+  .tanpa-bar { scrollbar-width: none; } .tanpa-bar::-webkit-scrollbar { display: none; }
+  .bayang-atas { box-shadow: 0 -1px 0 rgb(var(--line)); }
+}
+
+@media print {
+  [data-cetak="sorok"], header, footer, nav { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .kad { break-inside: avoid; border-color: #ccc !important; }
+  a { text-decoration: none !important; color: inherit !important; }
+}

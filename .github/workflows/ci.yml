@@ -1,0 +1,54 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  lint-and-engine:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: PHP syntax
+        run: find app dev -name '*.php' -print0 | xargs -0 -n1 php -l
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Formula engine vs real Excel results (90 cases)
+        run: node tests/enjin.test.js app
+      - name: Smoke test (built-in server)
+        run: |
+          cp app/config/.env.example app/config/.env
+          echo '[]' > app/config/groq-keys.json
+          mkdir -p app/data
+          php -d log_errors=1 -d display_errors=0 -S 127.0.0.1:8000 -t app/public dev/router.php > /tmp/php.log 2>&1 &
+          sleep 2
+          for p in / /en/ /excel/ /excel/cheatsheet /excel/formulas /excel/reference /excel/practice /excel/playground /excel/tutor \
+                   /word/ /word/reference /en/powerpoint/practice /sitemap.xml; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:8000$p"); echo "$p $code"; [ "$code" = 200 ] || exit 1
+          done
+          [ "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8000/formula.php)" = 301 ]   # old URLs redirect
+          if grep 'PHP \(Fatal\|Warning\|Parse\)' /tmp/php.log; then exit 1; fi                     # no PHP errors while serving
+      - name: Bilingual content gate (same structure in Malay and English, style rules)
+        run: php app/alat/semak-kandungan.php
+  generated-files:
+    # tw.css, tw-admin.css and src/Ikon.php are committed build output; rebuilding from tailwind/ must change nothing.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Rebuild CSS and icons
+        working-directory: tailwind
+        run: npm install --no-audit --no-fund && npm run build && npm run icons
+      - name: Committed output matches the sources
+        run: git diff --exit-code -- app/public/assets/css app/src/Ikon.php
